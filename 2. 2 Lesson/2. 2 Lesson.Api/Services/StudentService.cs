@@ -12,7 +12,7 @@ namespace _2._2_Lesson.Api.Services;
 public class StudentService
 {
 
-    public string password = "student2024";
+    public string password = "teacher2024";
 
 
     private string studentsFilePath;

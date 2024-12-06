@@ -1,5 +1,7 @@
 ﻿using _2._2_Lesson.Api.Models;
 using _2._2_Lesson.Api.Services;
+using System.Security.Cryptography.X509Certificates;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace _2._2_Lesson.Api
 {
@@ -205,14 +207,13 @@ namespace _2._2_Lesson.Api
             }
         }
 
-
-
-
         public static void TeacherFrontEnd()
         {
             var teacherServices = new TeacherService();
             var studendService = new StudentService();
             var students = new Student();
+            var test = new Test();
+            var testService = new TestService();
 
 
             while (true)
@@ -229,6 +230,7 @@ namespace _2._2_Lesson.Api
                 Console.WriteLine("8. Update test");
                 Console.WriteLine("9. Get all tests");
                 Console.WriteLine("10. Get by ID of test");
+                Console.WriteLine("11. Get by ID of test");
                 Console.WriteLine();
                 Console.Write("Enter your option >> ");
                 var option = int.Parse(Console.ReadLine());
@@ -329,37 +331,107 @@ namespace _2._2_Lesson.Api
                     Console.WriteLine(str);
                     Console.WriteLine();
                 }
+                else if(option is 6)
+                {
+                    Console.Write("Question: ");
+                    test.QuestionText = Console.ReadLine();
+
+                    Console.Write("Variant A: ");
+                    test.AVariant = Console.ReadLine();
+
+                    Console.Write("VAriant B: ");
+                    test.BVariant = Console.ReadLine();
+
+                    Console.Write("Variant C: ");
+                    test.CVariant = Console.ReadLine();
+
+                    Console.Write("Answers: ");
+                    test.Answer = Console.ReadLine();
+
+                    testService.AddTest(test);
+
+                    Console.WriteLine("\nTest has been added successfully!!!\n");
+                }
+                else if(option is 7)
+                {
+                    Console.Write("Enter test ID to delete >> ");
+                    var deletingTest = Guid.Parse(Console.ReadLine());
+
+                    var resultForDelete = testService.DeleteTest(deletingTest);
+
+                    if(resultForDelete is true)
+                    {
+                        Console.WriteLine("\nTest has been removed successfully!!!\n");
+                    }
+                    else
+                    {
+                        Console.WriteLine("\nNot deleted or ERROR occured\n");
+                    }
+                }
+                else if(option is 8)
+                {
+                    Console.Write("Question: ");
+                    test.QuestionText = Console.ReadLine();
+
+                    Console.Write("Variant A: ");
+                    test.AVariant = Console.ReadLine();
+
+                    Console.Write("VAriant B: ");
+                    test.BVariant = Console.ReadLine();
+
+                    Console.Write("Variant C: ");
+                    test.CVariant = Console.ReadLine();
+
+                    Console.Write("Answers: ");
+                    test.Answer = Console.ReadLine();
+
+                    var resultUpdating = testService.UpdateTest(test);
+
+                    if(resultUpdating is true)
+                    {
+                        Console.WriteLine("\nChoosen test has been updated successfully\n");
+                    }
+                    else
+                    {
+                        Console.WriteLine("\nNot updated or ERROR has been occured!!!\n");
+                    }
+                }
+                else if(option is 9)
+                {
+                    var getAllTests = testService.GetAllTests();
+
+                    foreach(var tesst in getAllTests)
+                    {
+                        var str = $"Question: {tesst.QuestionText}\n Variant A: {tesst.AVariant}\n Variant B: {tesst.BVariant}\n Variant C: {tesst.CVariant}\n " +
+                            $"Answer: {tesst.Answer}";
+
+                        Console.WriteLine(str);
+                        Console.WriteLine();
+                    }
+                }
+                else if(option is 10)
+                {
+                    Console.Write("Enter test's ID: ");
+                    var testID = Guid.Parse(Console.ReadLine());
+
+                    var resultTestById = testService.GetById(testID);
+
+                    var str = $"Question: {resultTestById.QuestionText}\n Variant A: {resultTestById.AVariant}\n " +
+                        $"Variant B: {resultTestById.BVariant}\n Variant C: {resultTestById.CVariant}\n " +
+                    $"Answer: {resultTestById.Answer}";
+                    Console.WriteLine(str);
+                    Console.WriteLine();
+                }
                 Console.ReadKey();
                 Console.Clear();
-
             }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         }
+
+
 
         public static void StudentFrontEnd()
         {
 
         }
-
-
-
-
     }
 }

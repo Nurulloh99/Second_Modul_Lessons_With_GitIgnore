@@ -10,9 +10,9 @@ namespace _2._2_Lesson.Api.Services;
 
 public class TeacherService
 {
-    public string password = "teacher2024";
+    public string password = "director2024";
 
-    public string secondPassword = "Director2024";
+    public string secondPassword = "director2024";
 
 
     private string teachersFilePath;
