@@ -39,11 +39,19 @@ public class ClassStringBuilder
 
             index = 0;
 
+            var arr = new char[1];
+
+
             foreach(var strChar in strBuilder)
             {
-                newChar[index] = strChar;
-                index++;
+                if (strChar != arr[0])
+                {
+                    newChar[index] = strChar;
+                    index++;
+                }
             }
+
+            
 
             foreach (var strChar in strAppend)
             {
@@ -58,7 +66,18 @@ public class ClassStringBuilder
      
     public string GetValueBackStringFromArray()
     {
-        return string.Join("", strBuilder);
+        var str = String.Empty;
+        var arr = new char[1];
+
+        foreach(var character in strBuilder)
+        {
+            if(character != arr[0])
+            {
+                str += character;
+            }
+        }
+
+        return str;
     }
 
 

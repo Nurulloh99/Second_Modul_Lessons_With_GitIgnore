@@ -1,0 +1,365 @@
+﻿using _2._2_Lesson.Api.Models;
+using _2._2_Lesson.Api.Services;
+
+namespace _2._2_Lesson.Api
+{
+    internal class Program
+    {
+
+        public static void PasswordFrontEnd()
+        {
+            Console.WriteLine("1. Director");
+            Console.WriteLine("2. Teacher");
+            Console.WriteLine("3. Student");
+            Console.WriteLine();
+            Console.Write("Choose option >> ");
+            var option = int.Parse(Console.ReadLine());
+
+            var teacherService = new TeacherService();
+            var studentService = new StudentService();
+
+            if (option == 1) // DIRECTOR
+            {
+                Console.Write("Passwordni kiriting >> ");
+                var passResult = Console.ReadLine();
+
+                if (teacherService.password == passResult)
+                {
+                    DirectorFrontEnd();
+                }
+                else
+                {
+                    Console.WriteLine();
+                    Console.WriteLine("Incorrect password or ERROR has been occured !!!\n");
+                }
+            }
+            else if (option == 2) // TEACHER
+            {
+                Console.Write("Passwordni kiriting >> ");
+                var secondPassword = Console.ReadLine();
+
+                if (studentService.password == secondPassword)
+                {
+                    TeacherFrontEnd();
+                }
+                else
+                {
+                    Console.WriteLine();
+                    Console.WriteLine("Incorrect password or ERROR has been occured !!!\n");
+                }
+            }
+            else if (option == 3)
+            {
+                Console.Write("Passwordni kiriting >> ");
+                var thirdPassword = Console.ReadLine();
+
+                if (studentService.password == thirdPassword)
+                {
+                    StudentFrontEnd();
+                }
+                else
+                {
+                    Console.WriteLine();
+                    Console.WriteLine("Incorrect password or ERROR has been occured !!!\n");
+                }
+            }
+        }
+
+
+        static void Main(string[] args)
+        {
+            PasswordFrontEnd();
+        }
+
+
+        public static void DirectorFrontEnd()
+        {
+
+            var teacherServices = new TeacherService();
+            var teacher = new Teacher();
+
+            while (true)
+            {
+                Console.Clear();
+                Console.WriteLine("1. Add Teacher");
+                Console.WriteLine("2. Delete Teacher");
+                Console.WriteLine("3. Update Teacher");
+                Console.WriteLine("4. Get All Teachers");
+                Console.WriteLine("5. Get by ID of Teacher");
+                Console.WriteLine();
+                Console.Write("Choose option >> ");
+                var option = int.Parse(Console.ReadLine());
+                Console.Clear();
+
+                if (option is 1)
+                {
+                    Console.Write("First name: ");
+                    teacher.FirstName = Console.ReadLine();
+
+                    Console.Write("Last name: ");
+                    teacher.LastName = Console.ReadLine();
+
+                    Console.Write("Age: ");
+                    teacher.Age = int.Parse(Console.ReadLine());
+
+                    Console.Write("Subject: ");
+                    teacher.Subject = Console.ReadLine();
+
+                    Console.Write("Likes: ");
+                    teacher.Likes = int.Parse(Console.ReadLine());
+
+                    Console.Write("Dislikes: ");
+                    teacher.DisLikes = int.Parse(Console.ReadLine());
+
+                    Console.Write("Gender: ");
+                    teacher.Gender = (Console.ReadLine());
+
+                    Console.WriteLine("\nThe Teacher has been added succesfully\n");
+
+                    teacherServices.AddTeacher(teacher);
+
+                }
+                else if(option is 2)
+                {
+                    Console.Write("Enter ID for removing >> ");
+                    var delOption = Guid.Parse(Console.ReadLine());
+
+                    var resultDelTeacher = teacherServices.DeleteTeacher(delOption);
+
+                    if(resultDelTeacher is true)
+                    {
+                        Console.WriteLine("\nTeacher has been removed successfully!!!\n");
+                    }
+                    else
+                    {
+                        Console.WriteLine("\nError occured or not deleted\n");
+                    }
+                }
+                else if(option is 3)
+                {
+                    Console.Write("Enter teacher ID for update >> ");
+                    teacher.Id = Guid.Parse(Console.ReadLine());
+
+                    Console.Write("Enter teacher's first name >> ");
+                    teacher.FirstName = Console.ReadLine();
+
+                    Console.Write("Enter teacher's last name >> ");
+                    teacher.LastName = Console.ReadLine();
+
+                    Console.Write("Enter teacher's age >> ");
+                    teacher.Age = int.Parse(Console.ReadLine());
+
+                    Console.Write("Enter teacher's subject >> ");
+                    teacher.Subject = Console.ReadLine();
+
+                    Console.Write("Enter teacher's likes >> ");
+                    teacher.Likes = int.Parse(Console.ReadLine());
+
+                    Console.Write("Enter teacher's dislikes >> ");
+                    teacher.DisLikes = int.Parse(Console.ReadLine());
+
+                    Console.Write("Enter teacher's gender >> ");
+                    teacher.Gender = (Console.ReadLine());
+
+                    var updatingResult = teacherServices.UpdateTeacher(teacher);
+
+                    if (updatingResult is true)
+                    {
+                        Console.WriteLine("\nTeacher has been updated successfully!!!\n");
+                    }
+                    else
+                    {
+                        Console.WriteLine("\nError occured or not updated\n");
+                    }
+                }
+                else if(option is 4)
+                {
+                    var allTeachers = teacherServices.GetAllTeachers();
+
+                    foreach(var teachr in allTeachers)
+                    {
+                        var str = $"Teacher's ID: {teachr.Id}\n First name: {teachr.FirstName}\n Last name: {teachr.LastName}\n " +
+                            $"Age: {teachr.Age}\n Subject: {teachr.Subject}\n Likes: {teachr.Likes}\n " +
+                            $"Dislikes: {teachr.DisLikes}\n Gender: {teachr.Gender}";
+
+                        Console.WriteLine(str);
+                        Console.WriteLine();
+                    }
+                }
+                else if(option is 5)
+                {
+                    Console.Write("Enter ID of teacher >> ");
+                    var teacherId = Guid.Parse(Console.ReadLine());
+
+                    var teachr = teacherServices.GetById(teacherId);
+
+                    var str = $"Teacher's ID: {teachr.Id}\n First name: {teachr.FirstName}\n Last name: {teachr.LastName}\n " +
+                            $"Age: {teachr.Age}\n Subject: {teachr.Subject}\n Likes: {teachr.Likes}\n " +
+                            $"Dislikes: {teachr.DisLikes}\n Gender: {teachr.Gender}";
+
+                    Console.WriteLine(str);
+                    Console.WriteLine();
+                }
+                Console.ReadKey();
+                Console.Clear();
+            }
+        }
+
+
+
+
+        public static void TeacherFrontEnd()
+        {
+            var teacherServices = new TeacherService();
+            var studendService = new StudentService();
+            var students = new Student();
+
+
+            while (true)
+            {
+                Console.Clear();
+                Console.WriteLine("1. Add sutudent");
+                Console.WriteLine("2. Delete sutudent");
+                Console.WriteLine("3. Update sutudent");
+                Console.WriteLine("4. Get all sutudents");
+                Console.WriteLine("5. Get by ID of sutudent");
+                Console.WriteLine();
+                Console.WriteLine("6. Add test");
+                Console.WriteLine("7. Delete test");
+                Console.WriteLine("8. Update test");
+                Console.WriteLine("9. Get all tests");
+                Console.WriteLine("10. Get by ID of test");
+                Console.WriteLine();
+                Console.Write("Enter your option >> ");
+                var option = int.Parse(Console.ReadLine());
+                Console.Clear();
+
+                if (option is 1)
+                {
+                    Console.Write("Enter name >> ");
+                    students.FirstName = Console.ReadLine();
+
+                    Console.Write("Enter last name >> ");
+                    students.SecondName = Console.ReadLine();
+
+                    Console.Write("Enter age >> ");
+                    students.Age = int.Parse(Console.ReadLine());
+
+                    Console.Write("Enter degree >> ");
+                    students.Degree = int.Parse(Console.ReadLine());
+
+                    Console.Write("Enter gender >> ");
+                    students.Gender = Console.ReadLine();
+
+                    studendService.AddStudent(students);
+
+                    Console.WriteLine("Student added successfully!!!");
+                }
+                else if(option is 2)
+                {
+                    Console.Write("Enter student's ID >> ");
+                    var studentsID = Guid.Parse(Console.ReadLine());
+
+                    var deletingStudent = studendService.DeleteStudent(studentsID);
+
+                    if(deletingStudent is true)
+                    {
+                        Console.WriteLine("\nStudent deleted successfully!!!\n");
+                    }
+                    else
+                    {
+                        Console.WriteLine("\nNot deleted or ERROR occured!!!\n");
+                    }
+                }
+                else if(option is 3)
+                {
+                    Console.Write("Enter student's ID >> ");
+                    students.Id = Guid.Parse(Console.ReadLine());
+
+                    Console.Write("Enter name >> ");
+                    students.FirstName = Console.ReadLine();
+
+                    Console.Write("Enter last name >> ");
+                    students.SecondName = Console.ReadLine();
+
+                    Console.Write("Enter age >> ");
+                    students.Age = int.Parse(Console.ReadLine());
+
+                    Console.Write("Enter name >> ");
+                    students.Degree = int.Parse(Console.ReadLine());
+
+                    Console.Write("Enter name >> ");
+                    students.Gender = Console.ReadLine();
+
+                    var studentResult = studendService.UpdateStudent(students);
+
+                    if(studentResult is true)
+                    {
+                        Console.WriteLine("\nStudent has been updated successfully!!!\n");
+                    }
+                    else
+                    {
+                        Console.WriteLine("\nNot updated or ERROR occured\n");
+                    }
+                }
+                else if(option is 4)
+                {
+                    var allStudents = studendService.GetAllStudents();
+
+                    foreach(var student in allStudents)
+                    {
+                        var str = $"Student's ID: {student.Id}\n First name: {student.FirstName}\n " +
+                            $"Last name: {student.SecondName}\n Age: {student.Age}\n Degree: {student.Degree}\n " +
+                            $"Gender: {student.Gender}";
+
+                        Console.WriteLine(str);
+                        Console.WriteLine();
+                    }
+                }
+                else if(option is 5)
+                {
+                    Console.Write("Enter student's ID >> ");
+                    var studentId = Guid.Parse(Console.ReadLine());
+                    var student = studendService.GetById(studentId);
+
+                    var str = $"Student's ID: {student.Id}\n First name: {student.FirstName}\n " +
+                            $"Last name: {student.SecondName}\n Age: {student.Age}\n Degree: {student.Degree}\n " +
+                            $"Gender: {student.Gender}";
+
+                    Console.WriteLine(str);
+                    Console.WriteLine();
+                }
+                Console.ReadKey();
+                Console.Clear();
+
+            }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        }
+
+        public static void StudentFrontEnd()
+        {
+
+        }
+
+
+
+
+    }
+}

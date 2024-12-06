@@ -41,7 +41,7 @@ namespace _1._1_Lesson
             var text = strBuilder.GetValueBackStringFromArray();
             Console.WriteLine(text);
 
-            strBuilder.AppendValue(" vs Bekmurod");
+            strBuilder.AppendValue(" vs  Bekmurod");
             text = strBuilder.GetValueBackStringFromArray();
             Console.WriteLine(text);
 
