@@ -50,19 +50,31 @@ namespace _2._2_Lesson.Api
                     Console.WriteLine("Incorrect password or ERROR has been occured !!!\n");
                 }
             }
-            else if (option == 3)
+            else if (option == 3) // STUDENT
             {
                 Console.Write("Passwordni kiriting >> ");
                 var thirdPassword = Console.ReadLine();
 
-                if (studentService.password == thirdPassword)
+                Console.Write("Enter your ID >> ");
+                var studentId = Guid.Parse(Console.ReadLine());
+
+                var result = studentService.GetById(studentId);
+
+                if(result is null)
                 {
-                    StudentFrontEnd();
+                    Console.WriteLine("Wrong ID");
                 }
                 else
                 {
-                    Console.WriteLine();
-                    Console.WriteLine("Incorrect password or ERROR has been occured !!!\n");
+                    if (studentService.password == thirdPassword)
+                    {
+                        StudentFrontEnd(result);
+                    }
+                    else
+                    {
+                        Console.WriteLine();
+                        Console.WriteLine("Incorrect password or ERROR has been occured !!!\n");
+                    }
                 }
             }
         }
@@ -402,7 +414,7 @@ namespace _2._2_Lesson.Api
 
                     foreach(var tesst in getAllTests)
                     {
-                        var str = $"Question: {tesst.QuestionText}\n Variant A: {tesst.AVariant}\n Variant B: {tesst.BVariant}\n Variant C: {tesst.CVariant}\n " +
+                        var str = $"Test Id: {tesst.Id}\n Question: {tesst.QuestionText}\n Variant A: {tesst.AVariant}\n Variant B: {tesst.BVariant}\n Variant C: {tesst.CVariant}\n " +
                             $"Answer: {tesst.Answer}";
 
                         Console.WriteLine(str);
@@ -429,9 +441,96 @@ namespace _2._2_Lesson.Api
 
 
 
-        public static void StudentFrontEnd()
+        public static void StudentFrontEnd(Student studentById)
         {
+            var testService = new TestService();
+            var studentService = new StudentService();
 
+            while (true)
+            {
+                Console.Clear();
+                Console.WriteLine( "    MENU\n");
+                Console.WriteLine("1. Get Test By ID");
+                Console.WriteLine("2. Get All Tests");
+                Console.WriteLine("3. Show my results");
+                Console.WriteLine();
+                Console.Write("Choose >> ");
+                var option = int.Parse(Console.ReadLine());
+                Console.Clear();
+
+                if (option is 1)
+                {
+                    Console.Write("Test's ID >> ");
+                    var testId = Guid.Parse(Console.ReadLine());
+
+                    var testRes = testService.GetById(testId);
+
+                    if (testRes is null)
+                    {
+                        Console.WriteLine("Wrong test ID");
+                    }
+                    else
+                    {
+                        Console.WriteLine(testRes.QuestionText);
+                        Console.WriteLine(testRes.AVariant);
+                        Console.WriteLine(testRes.BVariant);
+                        Console.WriteLine(testRes.CVariant);
+
+                        Console.Write("Enter your answer >> ");
+
+                        var studentAnswer = Console.ReadLine();
+
+                        if(studentAnswer == testRes.Answer)
+                        {
+                            studentById.StudentTestResults.Add(1);
+
+                            studentService.UpdateStudent(studentById);
+                        }
+                        else
+                        {
+                            studentById.StudentTestResults.Add(0);
+
+                            studentService.UpdateStudent(studentById);
+                        }
+                    }
+                }else if(option is 2)
+                {
+                    var testRes = testService.GetAllTests();
+
+                    foreach(var test in testRes)
+                    {
+                        Console.WriteLine(test.QuestionText);
+                        Console.WriteLine(test.AVariant);
+                        Console.WriteLine(test.BVariant);
+                        Console.WriteLine(test.CVariant);
+
+                        Console.Write("Enter your answer >> ");
+
+                        var studentAnswer = Console.ReadLine();
+
+                        if (studentAnswer == test.Answer)
+                        {
+                            studentById.StudentTestResults.Add(1);
+
+                            studentService.UpdateStudent(studentById);
+                        }
+                        else
+                        {
+                            studentById.StudentTestResults.Add(0);
+
+                            studentService.UpdateStudent(studentById);
+                        }
+                    }
+                }else if(option is 3)
+                {
+                    foreach(var result in studentById.StudentTestResults)
+                    {
+                        Console.WriteLine($"{result} ");
+                    }
+                }
+                Console.ReadKey();
+                Console.Clear();
+            }
         }
     }
 }

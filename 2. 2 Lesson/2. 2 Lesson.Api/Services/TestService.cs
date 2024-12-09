@@ -41,6 +41,7 @@ public class TestService
     
     public Test AddTest(Test test)
     {
+        test.Id = Guid.NewGuid();
         var allTests = GetAllTestsFromJson();
 
         allTests.Add(test);
